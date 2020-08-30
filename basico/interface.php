@@ -15,8 +15,8 @@ interface Cadastro
 
 interface Validacao
 {
-    function validarSenha();
-    function validarUsuario();
+    function validarSenha(): bool; //uma interface consegue padronizar o tipo de retorno tbm
+    function validarUsuario(): bool;
 }
 
 class User implements Cadastro, Validacao
@@ -26,7 +26,7 @@ class User implements Cadastro, Validacao
     private $senha;
     private $email;
 
-    function __construct($nome=null, $idade=null, $senha=null, $email=null)
+    function __construct(string $nome=null, int $idade=null, string $senha=null,string $email=null)
     {
         $this->name = $nome;
         $this->idade = $idade;
@@ -38,29 +38,32 @@ class User implements Cadastro, Validacao
        return ["user"=> $this->name, "idade"=> $this->senha, "email" => $this->email];
     }
 
-    public function cadastrarLogradouro(...$dados)
+    public function cadastrarLogradouro($senha=null, ...$dados)
     {
-        if($this->validarSenha($dados['senha'])){
+        if($this->validarSenha($senha)){
             return [...$dados];
         }else {
             return "Não pode cadastar";
         }
     }
-    public function cadastrarFerramentas(...$dados)
+    public function cadastrarFerramentas($senha=null, ...$dados)
     {
-        if($this->validarSenha($dados['senha'])){
+        if($this->validarSenha($senha)){
             return [...$dados];
         }else {
             return "Não pode cadastar";
         }
     }
 
-    public function validarSenha(...$senha)
+    function validarSenha($senha=null): bool
     {
         return $this->senha == $senha;
     }
-    public function validarUsuario(...$user)
+    function validarUsuario($user=null): bool
     {
         return $this->user == $user;
     }
 }
+
+$carlos = new User("carlos", 30, "1234567", "lupback@gmail.com");
+print_r($carlos->cadastrarLogradouro("1234567", ["casa"=> "Narnia Bool Pack", "rua"=> "hogwarts", "numero"=> "9 3/4"]));
